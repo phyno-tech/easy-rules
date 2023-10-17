@@ -13,6 +13,7 @@ public enum RuleType {
 
     private final String description;
     private final Object object;
+
     <T> RuleType(@NonNull String description, @NonNull T object) {
         this.description = description;
         this.object = object;

@@ -1,6 +1,7 @@
 package ke.co.phyno.learning.easy.rules.rules.age;
 
 import ke.co.phyno.learning.easy.rules.data.customer.CustomerInfoData;
+import ke.co.phyno.learning.easy.rules.type.RuleType;
 import ke.co.phyno.learning.easy.rules.utils.SharedUtils;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
@@ -14,18 +15,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.logging.Level;
 
 @Log
 @SpringBootTest
 public class AgeRulesTests {
-    @Autowired
-    private MinimumAgeRule minimumAgeRule;
-
-    @Autowired
-    private MaximumAgeRule maximumAgeRule;
-
     @Autowired
     private SharedUtils sharedUtils;
 
@@ -39,7 +33,7 @@ public class AgeRulesTests {
         rulesEngine.registerRuleListener(new RuleListener() {
             @Override
             public boolean beforeEvaluate(Rule rule, Facts facts) {
-                log.log(Level.INFO, String.format("Evaluate rule - %s", rule.getName()));
+                log.log(Level.FINE, String.format("Evaluate rule - %s", rule.getName()));
                 if (facts.get("JOHARI_ERROR") == null) {
                     return RuleListener.super.beforeEvaluate(rule, facts);
                 }
@@ -49,7 +43,7 @@ public class AgeRulesTests {
             @SneakyThrows
             @Override
             public void afterEvaluate(Rule rule, Facts facts, boolean success) {
-                log.log(Level.INFO, String.format("Evaluate rule done [ rule=%s, success=%s, facts=%s ]", rule.getName(), success, sharedUtils.toJson(facts.asMap(), true)));
+                log.log(Level.FINE, String.format("Evaluate rule done [ rule=%s, success=%s, facts=%s ]", rule.getName(), success, sharedUtils.toJson(facts.asMap(), true)));
                 if (success && facts.get("JOHARI_ERROR") != null) {
                     throw new Exception(String.format("Rule not properly defined - %s", rule.getName()));
                 }
@@ -70,7 +64,7 @@ public class AgeRulesTests {
     @DisplayName(value = "Test minimum age rule")
     public void testMinimumAgeRule() {
         Rules rules = new Rules();
-        rules.register(this.minimumAgeRule);
+        rules.register(RuleType.MINIMUM_AGE.getObject());
 
         RulesEngine rulesEngine = this.rulesEngine();
         Facts facts = this.facts();
@@ -82,7 +76,7 @@ public class AgeRulesTests {
     @DisplayName(value = "Test maximum age rule")
     public void testMaximumAgeRule() {
         Rules rules = new Rules();
-        rules.register(this.maximumAgeRule);
+        rules.register(RuleType.MAXIMUM_AGE.getObject());
 
         RulesEngine rulesEngine = this.rulesEngine();
         Facts facts = this.facts();
@@ -94,7 +88,7 @@ public class AgeRulesTests {
     @DisplayName(value = "Test all age rules")
     public void testAllAgeRules() {
         Rules rules = new Rules();
-        rules.register(this.minimumAgeRule, this.maximumAgeRule);
+        rules.register(RuleType.MINIMUM_AGE.getObject(), RuleType.MAXIMUM_AGE.getObject());
 
         RulesEngine rulesEngine = this.rulesEngine();
         Facts facts = this.facts();

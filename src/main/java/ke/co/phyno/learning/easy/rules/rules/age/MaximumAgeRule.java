@@ -2,12 +2,12 @@ package ke.co.phyno.learning.easy.rules.rules.age;
 
 import ke.co.phyno.learning.easy.rules.data.customer.CustomerInfoData;
 import ke.co.phyno.learning.easy.rules.data.error.ErrorData;
-import ke.co.phyno.learning.easy.rules.utils.SharedUtils;
 import lombok.extern.java.Log;
-import org.jeasy.rules.annotation.*;
+import org.jeasy.rules.annotation.Action;
+import org.jeasy.rules.annotation.Condition;
+import org.jeasy.rules.annotation.Fact;
+import org.jeasy.rules.annotation.Rule;
 import org.jeasy.rules.api.Facts;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -15,12 +15,8 @@ import java.time.ZoneId;
 import java.util.logging.Level;
 
 @Log
-@Component
 @Rule(name = "Maximum Age Rule", description = "Customer's Maximum Age Rule", priority = 2)
 public class MaximumAgeRule {
-    @Autowired
-    private SharedUtils sharedUtils;
-
     @Condition
     public boolean when(
             @Fact(value = "REQUEST_ID") String requestId,
@@ -29,7 +25,7 @@ public class MaximumAgeRule {
     ) {
         log.log(Level.INFO, String.format("Maximum age rule running - %s [ customerInfo=%s ]", requestId, customerInfo));
 
-        Integer age  = facts.get("CUSTOMER_AGE");
+        Integer age = facts.get("CUSTOMER_AGE");
         log.log(Level.INFO, String.format("Maximum age rule customer age from facts - %s [ age=%s ]", requestId, age));
         if (age == null) {
             LocalDate today = LocalDate.now(ZoneId.of("Africa/Nairobi"));
@@ -69,7 +65,7 @@ public class MaximumAgeRule {
 
     @Action
     public void complete(Facts facts) {
-        log.log(Level.INFO, String.format("Maximum age run [ %s ]", this.sharedUtils.toJson(facts.asMap(), true)));
+        log.log(Level.INFO, String.format("Maximum age run [ %s ]", facts.asMap()));
     }
 
     private int getMaximumAge() {
