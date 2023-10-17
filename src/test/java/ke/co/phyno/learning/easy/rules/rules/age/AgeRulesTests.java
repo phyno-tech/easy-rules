@@ -64,7 +64,7 @@ public class AgeRulesTests {
     @DisplayName(value = "Test minimum age rule")
     public void testMinimumAgeRule() {
         Rules rules = new Rules();
-        rules.register(RuleType.MINIMUM_AGE.getObject());
+        rules.register(RuleType.MINIMUM_AGE.getRule());
 
         RulesEngine rulesEngine = this.rulesEngine();
         Facts facts = this.facts();
@@ -76,7 +76,7 @@ public class AgeRulesTests {
     @DisplayName(value = "Test maximum age rule")
     public void testMaximumAgeRule() {
         Rules rules = new Rules();
-        rules.register(RuleType.MAXIMUM_AGE.getObject());
+        rules.register(RuleType.MAXIMUM_AGE.getRule());
 
         RulesEngine rulesEngine = this.rulesEngine();
         Facts facts = this.facts();
@@ -88,7 +88,7 @@ public class AgeRulesTests {
     @DisplayName(value = "Test all age rules")
     public void testAllAgeRules() {
         Rules rules = new Rules();
-        rules.register(RuleType.MINIMUM_AGE.getObject(), RuleType.MAXIMUM_AGE.getObject());
+        rules.register(RuleType.MINIMUM_AGE.getRule(), RuleType.MAXIMUM_AGE.getRule());
 
         RulesEngine rulesEngine = this.rulesEngine();
         Facts facts = this.facts();

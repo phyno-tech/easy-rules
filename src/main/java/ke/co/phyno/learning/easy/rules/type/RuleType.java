@@ -12,10 +12,10 @@ public enum RuleType {
     ;
 
     private final String description;
-    private final Object object;
+    private final Object rule;
 
-    <T> RuleType(@NonNull String description, @NonNull T object) {
+    <T> RuleType(@NonNull String description, @NonNull T rule) {
         this.description = description;
-        this.object = object;
+        this.rule = rule;
     }
 }
