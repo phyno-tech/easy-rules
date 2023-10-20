@@ -1,20 +1,22 @@
 package ke.co.phyno.learning.easy.rules.type;
 
-import ke.co.phyno.learning.easy.rules.rules.age.MaximumAgeRule;
-import ke.co.phyno.learning.easy.rules.rules.age.MinimumAgeRule;
+import ke.co.phyno.learning.easy.rules.rules.BaseRule;
+import ke.co.phyno.learning.easy.rules.rules.age.MaximumAgeBaseRule;
+import ke.co.phyno.learning.easy.rules.rules.age.MinimumAgeBaseRule;
+import ke.co.phyno.learning.easy.rules.utils.RuleTypeUtils;
 import lombok.Getter;
 import org.springframework.lang.NonNull;
 
 @Getter
 public enum RuleType {
-    MINIMUM_AGE("", new MinimumAgeRule()),
-    MAXIMUM_AGE("", new MaximumAgeRule()),
+    MINIMUM_AGE("", RuleTypeUtils.getBean(MinimumAgeBaseRule.class)),
+    MAXIMUM_AGE("", RuleTypeUtils.getBean(MaximumAgeBaseRule.class)),
     ;
 
     private final String description;
-    private final Object rule;
+    private final BaseRule rule;
 
-    <T> RuleType(@NonNull String description, @NonNull T rule) {
+    <T> RuleType(@NonNull String description, @NonNull BaseRule rule) {
         this.description = description;
         this.rule = rule;
     }

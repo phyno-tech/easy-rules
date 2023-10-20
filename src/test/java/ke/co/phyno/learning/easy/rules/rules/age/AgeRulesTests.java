@@ -1,6 +1,7 @@
 package ke.co.phyno.learning.easy.rules.rules.age;
 
 import ke.co.phyno.learning.easy.rules.data.customer.CustomerInfoData;
+import ke.co.phyno.learning.easy.rules.rules.BaseRule;
 import ke.co.phyno.learning.easy.rules.type.RuleType;
 import ke.co.phyno.learning.easy.rules.utils.SharedUtils;
 import lombok.SneakyThrows;
@@ -14,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -87,12 +90,20 @@ public class AgeRulesTests {
     @Test
     @DisplayName(value = "Test all age rules")
     public void testAllAgeRules() {
-        Rules rules = new Rules();
-        rules.register(RuleType.MINIMUM_AGE.getRule(), RuleType.MAXIMUM_AGE.getRule());
+        List<BaseRule> rules = new ArrayList<>();
+
+        BaseRule min = RuleType.MINIMUM_AGE.getRule();
+        min.setPriority(1);
+        rules.add(min);
+
+        BaseRule max = RuleType.MAXIMUM_AGE.getRule();
+        max.setPriority(2);
+        rules.add(max);
 
         RulesEngine rulesEngine = this.rulesEngine();
         Facts facts = this.facts();
-        rulesEngine.fire(rules, facts);
-        log.log(Level.INFO, String.format("Rules fired [ %s ]", this.sharedUtils.toJson(facts.asMap(), true)));
+
+        rulesEngine.fire(new Rules(rules.toArray()), facts);
+        log.log(Level.INFO, String.format("All rules fired [ %s ]", this.sharedUtils.toJson(facts.asMap(), true)));
     }
 }
