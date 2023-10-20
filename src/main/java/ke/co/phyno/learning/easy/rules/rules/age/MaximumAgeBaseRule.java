@@ -2,6 +2,7 @@ package ke.co.phyno.learning.easy.rules.rules.age;
 
 import ke.co.phyno.learning.easy.rules.data.customer.CustomerInfoData;
 import ke.co.phyno.learning.easy.rules.data.error.ErrorData;
+import ke.co.phyno.learning.easy.rules.data.rules.RuleAgeData;
 import ke.co.phyno.learning.easy.rules.rules.BaseRule;
 import ke.co.phyno.learning.easy.rules.utils.SharedUtils;
 import lombok.extern.java.Log;
@@ -33,7 +34,9 @@ public class MaximumAgeBaseRule extends BaseRule {
             @Fact(value = "FINACLE_CUSTOMER_INFO") CustomerInfoData customerInfo,
             Facts facts
     ) {
-        log.log(Level.INFO, String.format("Maximum age rule running - %s [ customerInfo=%s ]", requestId, customerInfo));
+        log.log(Level.INFO, String.format("Maximum age rule running - %s [ data=%s, customerInfo=%s ]", requestId, this.getData(), customerInfo));
+        RuleAgeData data = this.sharedUtils.fromJson(this.getData(), RuleAgeData.class);
+        log.log(Level.INFO, String.format("Maximum age rule data from configuration - %s [ data=%s, customerInfo=%s ]", requestId, data, customerInfo));
 
         Integer age = facts.get("CUSTOMER_AGE");
         log.log(Level.INFO, String.format("Maximum age rule customer age from facts - %s [ age=%s ]", requestId, age));
@@ -60,11 +63,11 @@ public class MaximumAgeBaseRule extends BaseRule {
 
         }
 
-        if (age > this.getMaximumAge()) {
+        if (age > data.getAge()) {
             log.log(Level.WARNING, String.format("Maximum age rule failed. Customer too old - %s [ age=%s, customerInfo=%s ]", requestId, age, customerInfo));
             facts.put("JOHARI_ERROR", ErrorData.builder()
                     .code(2)
-                    .statusMessage(String.format("Customer above required age %s, customer's age %s", this.getMaximumAge(), age))
+                    .statusMessage(String.format("Customer above required age %s, customer's age %s", data.getAge(), age))
                     .customerMessage("Customer too old for this")
                     .build());
             return false;
@@ -76,9 +79,5 @@ public class MaximumAgeBaseRule extends BaseRule {
     @Action
     public void complete(Facts facts) {
         log.log(Level.INFO, String.format("Maximum age condition success [ %s ]", this.sharedUtils.toJson(facts.asMap(), true)));
-    }
-
-    private int getMaximumAge() {
-        return 65;
     }
 }

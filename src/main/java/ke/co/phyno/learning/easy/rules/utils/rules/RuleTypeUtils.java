@@ -1,4 +1,4 @@
-package ke.co.phyno.learning.easy.rules.utils;
+package ke.co.phyno.learning.easy.rules.utils.rules;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

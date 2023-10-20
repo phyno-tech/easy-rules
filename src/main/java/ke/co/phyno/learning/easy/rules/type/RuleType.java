@@ -3,7 +3,7 @@ package ke.co.phyno.learning.easy.rules.type;
 import ke.co.phyno.learning.easy.rules.rules.BaseRule;
 import ke.co.phyno.learning.easy.rules.rules.age.MaximumAgeBaseRule;
 import ke.co.phyno.learning.easy.rules.rules.age.MinimumAgeBaseRule;
-import ke.co.phyno.learning.easy.rules.utils.RuleTypeUtils;
+import ke.co.phyno.learning.easy.rules.utils.rules.RuleTypeUtils;
 import lombok.Getter;
 import org.springframework.lang.NonNull;
 
@@ -16,7 +16,7 @@ public enum RuleType {
     private final String description;
     private final BaseRule rule;
 
-    <T> RuleType(@NonNull String description, @NonNull BaseRule rule) {
+    RuleType(@NonNull String description, @NonNull BaseRule rule) {
         this.description = description;
         this.rule = rule;
     }
