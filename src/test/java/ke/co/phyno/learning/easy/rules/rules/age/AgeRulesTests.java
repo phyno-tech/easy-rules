@@ -3,6 +3,7 @@ package ke.co.phyno.learning.easy.rules.rules.age;
 import ke.co.phyno.learning.easy.rules.data.customer.CustomerInfoData;
 import ke.co.phyno.learning.easy.rules.rules.BaseRule;
 import ke.co.phyno.learning.easy.rules.type.RuleType;
+import ke.co.phyno.learning.easy.rules.utils.RuleUtils;
 import ke.co.phyno.learning.easy.rules.utils.SharedUtils;
 import lombok.extern.java.Log;
 import org.jeasy.rules.api.Facts;
@@ -27,11 +28,14 @@ public class AgeRulesTests {
     private SharedUtils sharedUtils;
 
     @Autowired
+    private RuleUtils ruleUtils;
+
+    @Autowired
     private RulesEngine ageRulesEngine;
 
     private final CustomerInfoData customerInfo = CustomerInfoData.builder()
             .name("Phelix Ochieng")
-            .dateOfBirth(Date.valueOf(LocalDate.of(1980, 1, 4)))
+            .dateOfBirth(Date.valueOf(LocalDate.of(2020, 1, 4)))
             .build();
 
     private Facts facts() {
@@ -45,7 +49,8 @@ public class AgeRulesTests {
     @DisplayName(value = "Test minimum age rule")
     public void testMinimumAgeRule() {
         Rules rules = new Rules();
-        rules.register(RuleType.MINIMUM_AGE.getRule());
+        BaseRule rule = this.ruleUtils.rule(RuleType.MINIMUM_AGE);
+        rules.register(rule);
 
         RulesEngine rulesEngine = this.ageRulesEngine;
         Facts facts = this.facts();
@@ -57,7 +62,8 @@ public class AgeRulesTests {
     @DisplayName(value = "Test maximum age rule")
     public void testMaximumAgeRule() {
         Rules rules = new Rules();
-        rules.register(RuleType.MAXIMUM_AGE.getRule());
+        BaseRule rule = this.ruleUtils.rule(RuleType.MAXIMUM_AGE);
+        rules.register(rule);
 
         RulesEngine rulesEngine = this.ageRulesEngine;
         Facts facts = this.facts();
@@ -70,12 +76,12 @@ public class AgeRulesTests {
     public void testAllAgeRules() {
         List<BaseRule> rules = new ArrayList<>();
 
-        BaseRule min = RuleType.MINIMUM_AGE.getRule();
+        BaseRule min = this.ruleUtils.rule(RuleType.MINIMUM_AGE);
         min.setPriority(1);
         min.setData("{\"age\":10}");
         rules.add(min);
 
-        BaseRule max = RuleType.MAXIMUM_AGE.getRule();
+        BaseRule max = this.ruleUtils.rule(RuleType.MAXIMUM_AGE);
         max.setPriority(2);
         max.setData("{\"age\":65}");
         rules.add(max);

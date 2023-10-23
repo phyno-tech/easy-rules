@@ -13,7 +13,7 @@ import java.util.logging.Level;
 
 @Log
 @Configuration
-public class RuleConfigurer {
+public class RulesConfigurer {
     @Autowired
     private SharedUtils sharedUtils;
 
