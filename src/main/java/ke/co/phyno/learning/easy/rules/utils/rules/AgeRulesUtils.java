@@ -64,6 +64,10 @@ public class AgeRulesUtils {
         return true;
     }
 
+    public void minimumAgeRuleComplete(@NonNull Facts facts) {
+        log.log(Level.INFO, String.format("Minimum age condition success [ %s ]", this.sharedUtils.toJson(facts.asMap(), true)));
+    }
+
     public boolean maximumAgeRule(@NonNull String requestId, @NonNull CustomerInfoData customerInfo, @NonNull Facts facts, String ruleData) {
         log.log(Level.INFO, String.format("Maximum age rule running - %s [ data=%s, facts=%s ]", requestId, ruleData, this.sharedUtils.toJson(facts.asMap(), true)));
         RuleAgeData data = this.sharedUtils.fromJson(ruleData, RuleAgeData.class);
@@ -105,5 +109,9 @@ public class AgeRulesUtils {
         }
 
         return true;
+    }
+
+    public void maximumAgeRuleComplete(@NonNull Facts facts) {
+        log.log(Level.INFO, String.format("Maximum age condition success [ %s ]", this.sharedUtils.toJson(facts.asMap(), true)));
     }
 }
